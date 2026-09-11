@@ -1,8 +1,0 @@
-{
-    "temperatura_interna": 29,
-    "temperatura_externa": 18,
-    "integridade_estrutural": 1,
-    "energia": 82,
-    "pressao_tanques": 91,
-    "modulos_criticos": "WARN"
-}
