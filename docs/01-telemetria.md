@@ -150,7 +150,7 @@ Os módulos críticos podem apresentar três estados:
 | 🔴 FALHA  | Falha identificada          |
 
 
-> ⚠️ Caso qualquer módulo crítico apresente o estado FALHA, a decolagem deverá ser abortada.
+> ⚠️ Caso o módulo crítico apresente o estado FALHA, a decolagem deverá ser abortada.
 
 ---
 
