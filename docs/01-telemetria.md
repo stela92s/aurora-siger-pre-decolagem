@@ -145,9 +145,9 @@ Os módulos críticos podem apresentar três estados:
 
 | Status   | Significado                 |
 | -------- | --------------------------- |
-|  🟢 OK     | Funcionamento normal        |
-| 🟡 ALERTA | Condição que requer atenção |
-| 🔴 FALHA  | Falha identificada          |
+| 🟢 OK     | Aprovação        |
+| 🟡 ALERTA | Não autoriza a decolagem |
+| 🔴 FALHA  | Aborta          |
 
 
 > ⚠️ Caso o módulo crítico apresente o estado FALHA, a decolagem deverá ser abortada.
@@ -158,14 +158,14 @@ Os módulos críticos podem apresentar três estados:
 
 A tabela a seguir apresenta os principais parâmetros utilizados na verificação das condições operacionais da nave antes da decolagem.
 
-| 📡 Parâmetro               |  Unidade |  Mínimo |  Máximo | 
-| -------------------------- | ---------- | --------: | --------: |
-| 🌡️ Temperatura interna    | °C         |        15 |        30 |
-| 🌡️ Temperatura externa    | °C         |       -50 |        50 | 
-| 🏗️ Integridade estrutural | 0/1        |         1 |         1 | 
-| ⚡ Energia                  | %          |        80 |       100 | 
-| ⛽ Pressão dos tanques      | PSI         |        150 |       300 | 
-| 🔧 Módulos críticos        | Estado     |      `OK` |      `OK` | 
+| Parâmetro               |  Unidade |   Condições para OK | 
+| -------------------------- | ---------- |  --------: |
+| 🌡️ Temperatura interna    | °C         | 15°C até 30°C |
+| 🌡️ Temperatura externa    | °C         | -50°C até 50°C | 
+| 🏗️ Integridade estrutural | 0/1        |  igual a 1 | 
+| ⚡ Energia                  | %          | 80% até 100%  | 
+| ⛽ Pressão dos tanques      | PSI         |  150 até 300 PSI | 
+| 🔧 Módulos críticos        | Estado     | OK  | 
 
 
 
