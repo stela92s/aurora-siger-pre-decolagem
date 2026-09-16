@@ -6,30 +6,41 @@
 
 ---
 
-## 4.1 Análise Energética
+## 4.1 Objetivo
 
-A análise energética tem como objetivo determinar a autonomia inicial da nave Aurora Siger a partir das informações disponíveis sobre seu sistema de energia. Essa análise será utilizada para verificar se a quantidade de energia disponível é suficiente para atender ao consumo previsto durante a operação.
+A análise energética tem como objetivo determinar a energia efetivamente disponível e estimar a autonomia energética inicial da nave Aurora Siger com base nos parâmetros disponíveis de seu sistema de energia.
 
-Para realizar esse cálculo, serão considerados quatro fatores principais: capacidade total de energia, carga atual, consumo estimado na decolagem e perdas energéticas.
-
----
-
-## 4.2 Objetivo
-Essa etapa é importante para verificar se a energia disponível é suficiente para atender aos requisitos da operação. O resultado da análise pode ser utilizado como um dos critérios para a tomada de decisão do sistema de pré-decolagem.
+Essa análise será utilizada para verificar se a energia armazenada é suficiente para atender aos requisitos energéticos previstos para a operação, especialmente durante a etapa de pré-decolagem e decolagem.
 
 ---
 
-## 4.3 Parâmetros Monitorados
+## 4.2 Parâmetros
 
-|ID| Parâmetro | unidade| 
-|CAP_TOTAL| Capacidade total| kwh |
-|CAR_ATUAL| Carga atual| % |
-|CONS_EST| Consumo estimado na decolagem| kwh|
-|PER_ENERG| Perdas energéticas| kWh |
+Para a realização dos cálculos, serão considerados quatro parâmetros principais:
+
+* capacidade total de armazenamento de energia;
+* nível atual de carga;
+* consumo energético estimado para a operação;
+* perdas energéticas do sistema.
+
+> Os resultados obtidos servirão como subsídio para o sistema de validação das condições de pré-decolagem
 
 ---
 
-## 4.4 Descrição dos parametros de energia
+## 4.3 Parâmetros
+
+| ID          | Parâmetro                         | Unidade  |
+| ----------- | --------------------------------- | -------- |
+| `CAP_TOTAL` | Capacidade total de armazenamento | kWh      |
+| `CAR_ATUAL` | Carga atual do sistema            | %        |
+| `CONS_EST`  | Consumo estimado da operação      | kW / kWh |
+| `PER_ENERG` | Perdas energéticas                | %        |
+
+> O consumo deve ser representado em kW quando utilizado para determinar autonomia em função do tempo. Quando o objetivo for representar uma quantidade total de energia consumida durante uma operação específica, deve ser utilizado kWh.
+
+---
+
+## 4.4 Descrição dos Parâmetros Energéticos
 
 ---
 
@@ -37,120 +48,210 @@ Essa etapa é importante para verificar se a energia disponível é suficiente p
 
 A capacidade total corresponde à quantidade máxima de energia que o sistema de armazenamento da nave é capaz de armazenar.
 
-Esse valor será expresso em quilowatt-hora (kWh) e representa a capacidade energética nominal disponível quando o sistema está completamente carregado.
+Esse parâmetro será expresso em quilowatt-hora (kWh) e representa a capacidade energética nominal do sistema quando este se encontra completamente carregado.
 
-A capacidade total será utilizada como referência para determinar a quantidade de energia efetivamente disponível de acordo com o nível atual de carga.
+A capacidade total será utilizada como referência para determinar a quantidade de energia atualmente armazenada a partir do nível de carga informado.
 
 ---
 
 ### 4.4.2 Carga Atual
 
-A carga atual representa o percentual de energia disponível no sistema no momento da análise.
+A carga atual representa o percentual de energia armazenada no sistema no momento em que a análise é realizada.
 
-A partir da capacidade total e da porcentagem de carga, será possível determinar a quantidade de energia armazenada atualmente.
+A partir da `capacidade total` e do `percentual de carga`, será possível determinar a quantidade de energia atualmente disponível no sistema.
 
-O cálculo será realizado pela relação:
+O cálculo será realizado por meio da seguinte relação:
 
+```text
 Energia disponível = Capacidade total × (Carga atual / 100)
+```
 
-Dessa forma, a porcentagem de carga será convertida em uma quantidade de energia expressa em kWh.
+Onde:
 
-Esse valor representa a energia armazenada antes de serem consideradas as perdas energéticas do sistema.
+* Energia disponível é expressa em kWh;
+* Capacidade total é expressa em kWh;
+* Carga atual é expressa em porcentagem.
+
+Dessa forma, o percentual de carga é convertido em uma quantidade absoluta de energia armazenada.
+
+Esse valor representa a energia disponível antes da aplicação do fator correspondente às perdas energéticas do sistema.
 
 ---
 
 ### 4.4.3 Consumo Estimado na Decolagem
 
-O consumo estimado na decolagem representa a quantidade de energia necessária para executar a etapa de decolagem da nave.
+O `consumo estimado` representa a demanda energética necessária para executar a operação planejada, com especial atenção à etapa de decolagem.
 
-Esse parâmetro deverá considerar o consumo dos sistemas envolvidos na operação, incluindo os sistemas de propulsão, controle, computadores de bordo, sensores, comunicação e demais equipamentos necessários para o funcionamento da nave.
+Esse parâmetro deverá considerar o consumo dos principais sistemas envolvidos na operação da nave, incluindo, quando aplicável:
 
-O consumo será utilizado para determinar quanto da energia disponível será utilizada durante a decolagem e para calcular a autonomia energética do sistema.
+* sistemas de propulsão;
+* sistemas de controle;
+* computadores de bordo;
+* sensores;
+* sistemas de comunicação;
+* sistemas de navegação;
+* sistemas de gerenciamento de energia;
+* demais equipamentos necessários à operação.
 
-É importante diferenciar energia consumida, expressa em kWh, de potência, expressa em kW. Para o cálculo da autonomia em tempo, o consumo deverá ser definido como uma taxa de consumo, permitindo relacionar a energia disponível ao consumo por unidade de tempo.
+O `consumo estimado` será utilizado para determinar a demanda energética da operação e verificar se a energia útil disponível é suficiente para atendê-la.
+
+É importante distinguir energia de potência:
+
+* Energia (kWh): representa a quantidade de energia consumida ou armazenada;
+* Potência (kW): representa a taxa de consumo ou fornecimento de energia.
+
+Quando o objetivo for calcular a autonomia em função do tempo, o consumo deverá ser representado como uma potência média ou taxa de consumo, em kW.
+
+Nesse caso, a relação entre energia disponível e potência consumida permitirá determinar o tempo estimado de autonomia.
 
 ---
 
 ### 4.4.4  Perdas Energéticas
 
-As perdas energéticas representam a parcela da energia que não estará efetivamente disponível para utilização devido às perdas ocorridas durante o armazenamento, conversão e distribuição da energia.
+As `perdas energéticas` representam a parcela da energia armazenada que não estará efetivamente disponível para utilização devido às perdas ocorridas durante os processos de armazenamento, conversão, transmissão e distribuição.
 
-Essas perdas podem estar relacionadas à eficiência dos sistemas elétricos, conversores, cabos, baterias e outros componentes envolvidos no fornecimento de energia.
+Essas perdas podem estar associadas à eficiência de componentes como:
 
-As perdas serão consideradas como um percentual da energia disponível.
+* baterias;
+* conversores;
+* inversores;
+* cabos;
+* sistemas de distribuição;
+* circuitos eletrônicos;
+* demais componentes do sistema elétrico.
 
-O cálculo poderá ser representado por:
+Para fins de cálculo, as perdas poderão ser representadas como um percentual da energia disponível.
 
+O cálculo será realizado por meio da seguinte relação:
+
+```text
 Perdas = Energia disponível × (Percentual de perdas / 100)
+```
 
-A energia efetivamente disponível para a operação será então determinada pela diferença entre a energia armazenada e as perdas:
+A energia efetivamente disponível para a operação será então determinada por:
 
-Energia útil = Energia disponível - Perdas
+`Energia útil = Energia disponível − Perdas`
 
-Esse valor será utilizado como base para o cálculo da autonomia.
+Ou, de forma equivalente:
+
+```test
+Energia útil = Energia disponível × (1 − Percentual de perdas / 100)
+```
+
+A energia útil será utilizada como referência para os cálculos de autonomia e para a validação da condição energética da nave.
 
 ---
 
 ### 4.5 Cálculo da Autonomia Inicial
 
-Após determinar a energia útil disponível, será realizado o cálculo da autonomia inicial da nave.
+Após a determinação da energia útil disponível, será realizado o cálculo da autonomia energética inicial da Aurora Siger.
 
-A autonomia representa o período durante o qual a energia disponível é capaz de sustentar o consumo previsto do sistema.
+A autonomia representa o período estimado durante o qual a energia útil disponível é capaz de sustentar uma determinada demanda energética.
 
-Quando o consumo for representado como uma taxa de potência, a autonomia poderá ser determinada pela relação:
+Quando o consumo for representado por uma potência média, a autonomia poderá ser calculada por meio da seguinte relação:
 
-Autonomia = Energia útil / Consumo
+Autonomia = Energia útil / Potência de consumo
 
-Nesse caso, considerando a energia em kWh e o consumo em kW, o resultado será obtido em horas.
+Considerando:
 
-A partir desse resultado, também será possível converter a autonomia para outras unidades de tempo, como minutos, caso necessário.
+energia útil em kWh;
+potência de consumo em kW;
+
+o resultado será obtido em horas (h).
+
+A autonomia poderá posteriormente ser convertida para minutos:
+
+Autonomia (min) = Autonomia (h) × 60
+
+Exemplo conceitual
+
+Considerando uma energia útil de 80 kWh e uma potência média de consumo de 20 kW:
+
+Autonomia = 80 / 20 = 4 h
+
+Portanto, nessas condições, a autonomia energética estimada seria de 4 horas.
+
+O valor de autonomia representa uma estimativa baseada na potência de consumo considerada. Alterações na demanda energética durante a operação resultarão em uma autonomia diferente.
 
 ---
 
 ## 4.6. Integração com o Sistema de Pré-Decolagem
 
-A análise energética será posteriormente integrada ao sistema de validação da Aurora Siger.
+A análise energética será posteriormente integrada ao sistema de validação das condições de pré-decolagem da Aurora Siger.
 
-O resultado do cálculo poderá ser utilizado como mais um parâmetro de segurança durante a verificação das condições de pré-decolagem.
+O resultado dos cálculos poderá ser utilizado como um dos parâmetros responsáveis pela determinação da condição energética da nave antes do início da operação.
 
-A lógica geral será baseada na comparação entre a energia útil disponível e a energia necessária para a operação planejada.
+A lógica de validação será baseada na comparação entre a energia útil disponível e a energia necessária para a operação planejada.
 
-Energia disponível suficiente
-        ↓
+Condição energética
+
+Energia útil suficiente
+↓
 Condição energética: OK
 
-Energia disponível insuficiente
-        ↓
+Energia útil insuficiente
+↓
 Condição energética: NOK
 
-Caso a autonomia calculada não atenda ao requisito mínimo estabelecido para a operação, o sistema deverá registrar uma condição de falha. Essa informação será posteriormente considerada junto aos demais parâmetros de telemetria na determinação do estado final da nave.
+Caso a energia útil disponível ou a autonomia calculada não atendam aos requisitos mínimos definidos para a operação, o sistema deverá registrar uma condição energética inadequada.
+
+Essa condição será posteriormente analisada em conjunto com os demais parâmetros de telemetria e critérios de validação, contribuindo para a determinação do estado geral da nave antes da decolagem.
 
 ---
 
 ## 4.7. Variáveis da Análise
 
-Para a implementação posterior em Python, a análise energética deverá trabalhar com as seguintes variáveis:
+Para a implementação posterior em Python, a análise energética deverá utilizar as seguintes variáveis:
 
-Variável	Descrição	Unidade
-Capacidade total	Capacidade máxima de armazenamento de energia	kWh
-Carga atual	Percentual de energia disponível	%
-Energia disponível	Energia armazenada de acordo com a carga atual	kWh
-Consumo	Energia ou potência utilizada durante a operação	kWh / kW
-Perdas energéticas	Percentual de energia perdida no sistema	%
-Energia útil	Energia efetivamente disponível após as perdas	kWh
-Autonomia	Tempo estimado de disponibilidade energética	h
+| Variável             | Descrição                                       | Unidade  |
+| -------------------- | ----------------------------------------------- | -------- |
+| `capacidade_total`   | Capacidade máxima de armazenamento de energia   | kWh      |
+| `carga_atual`        | Percentual de energia armazenada                | %        |
+| `energia_disponivel` | Energia armazenada correspondente à carga atual | kWh      |
+| `consumo`            | Potência média ou energia consumida na operação | kW / kWh |
+| `perdas_energeticas` | Percentual de perdas do sistema                 | %        |
+| `energia_util`       | Energia efetivamente disponível após as perdas  | kWh      |
+| `autonomia`          | Tempo estimado de disponibilidade energética    | h        |
+
 
 Essas variáveis formarão a base para o desenvolvimento do código responsável pelo cálculo energético da nave.
 
 ---
 
-## 4.8 Conclusão
+## 4.8 Critérios de Validação
 
-A análise energética permitirá determinar a quantidade de energia efetivamente disponível para a Aurora Siger e estimar sua autonomia inicial antes da decolagem.
+Para permitir a integração da análise energética ao sistema de pré-decolagem, recomenda-se estabelecer critérios objetivos de validação.
 
-O processo considera a capacidade total do sistema de armazenamento, o nível atual de carga, o consumo previsto durante a operação e as perdas energéticas existentes no sistema.
+A condição energética poderá ser determinada a partir da comparação entre a energia útil disponível e os requisitos energéticos da operação.
 
-A partir desses dados, será possível determinar a energia útil disponível e calcular a autonomia energética. Posteriormente, esses resultados serão incorporados ao sistema desenvolvido em Python, permitindo utilizar a condição energética como parte dos critérios de validação da pré-decolagem.
+De forma conceitual:
 
-Dessa forma, a análise energética complementará os demais parâmetros de telemetria do projeto, contribuindo para uma avaliação integrada das condições necessárias para a execução segura da operação.
+Energia útil ≥ Energia requerida
+→ Condição energética: OK
 
+Energia útil < Energia requerida
+→ Condição energética: NOK
+
+Quando a validação for baseada em autonomia:
+
+Autonomia calculada ≥ Autonomia mínima requerida
+→ Condição energética: OK
+
+Autonomia calculada < Autonomia mínima requerida
+→ Condição energética: NOK
+
+Os valores mínimos deverão ser definidos de acordo com os requisitos operacionais estabelecidos para a missão.
+
+---
+
+## 4.9 Conclusão
+
+A análise energética permitirá determinar a quantidade de energia efetivamente disponível para a Aurora Siger e estimar sua autonomia energética antes do início da operação.
+
+O processo considera a capacidade total do sistema de armazenamento, o nível atual de carga, o consumo energético previsto e as perdas associadas ao sistema elétrico.
+
+A partir desses parâmetros, será possível determinar a energia disponível, aplicar as perdas energéticas, obter a energia útil e, quando aplicável, calcular a autonomia estimada da nave.
+
+Os resultados serão posteriormente incorporados ao sistema desenvolvido em Python, permitindo utilizar a condição energética como um dos critérios de validação do processo de pré-decolagem.
+
+Dessa forma, a análise energética complementará os demais parâmetros de telemetria da Aurora Siger, proporcionando uma avaliação estruturada das condições energéticas necessárias para o início da operação.
