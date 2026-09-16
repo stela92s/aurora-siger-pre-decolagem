@@ -197,40 +197,261 @@ Essas variáveis formarão a base para o desenvolvimento do código responsável
 
 ---
 
-## 4.8 Critérios de Validação
+## 4.8 Implementação da Análise Energética em Python
 
-Para permitir a integração da análise energética ao sistema de pré-decolagem, recomenda-se estabelecer critérios objetivos de validação.
+A análise energética da Aurora Siger será implementada em Python com o objetivo de automatizar a obtenção dos dados, os cálculos de energia disponível, as perdas energéticas, a energia útil e a autonomia estimada da nave.
 
-A condição energética poderá ser determinada a partir da comparação entre a energia útil disponível e os requisitos energéticos da operação.
+O código foi estruturado em diferentes funções, permitindo separar a geração dos dados, a apresentação das informações, os cálculos energéticos e a tomada de decisão.
 
-De forma conceitual:
+### 4.8.1 Geração dos Dados Energéticos
 
-Energia útil ≥ Energia requerida
-→ Condição energética: OK
+Inicialmente, o programa utiliza a biblioteca `random` para gerar valores simulados dos parâmetros energéticos da nave. Essa abordagem permite realizar testes do sistema sem a necessidade de utilizar dados reais de telemetria.
 
-Energia útil < Energia requerida
-→ Condição energética: NOK
+```python
+import random
 
-Quando a validação for baseada em autonomia:
+def dados_energia():
+    return {
+        "capacidade_total": round(random.uniform(50, 100), 2),
+        "carga_atual": round(random.uniform(50, 100), 2),
+        "consumo": round(random.uniform(15, 40), 2),
+        "perdas_energeticas": round(random.uniform(5, 15), 2)
+    }
+```
 
-Autonomia calculada ≥ Autonomia mínima requerida
-→ Condição energética: OK
+A função `dados_energia()` retorna um conjunto de dados contendo:
 
-Autonomia calculada < Autonomia mínima requerida
-→ Condição energética: NOK
+* `capacidade_total`: capacidade máxima de armazenamento, em kWh;
+* `carga_atual`: percentual de carga armazenada;
+* `consumo`: potência média de consumo, em kW;
+* `perdas_energeticas`: percentual estimado de perdas do sistema.
 
-Os valores mínimos deverão ser definidos de acordo com os requisitos operacionais estabelecidos para a missão.
+Os valores são gerados dentro de intervalos definidos previamente para possibilitar a simulação de diferentes condições energéticas.
+
+### 4.8.2 Exibição dos Dados
+
+Após a geração dos parâmetros, a função `exibir_energia()` apresenta os dados energéticos no terminal.
+
+```python
+def exibir_energia(dados):
+
+    print("==================================================")
+    print("2. DADOS ENERGÉTICOS")
+    print("==================================================")
+
+    print(f"Capacidade total:       {dados['capacidade_total']} kWh")
+    print(f"Carga atual:            {dados['carga_atual']} %")
+    print(f"Consumo médio:          {dados['consumo']} kW")
+    print(f"Perdas energéticas:     {dados['perdas_energeticas']} %")
+```
+
+Essa função tem como finalidade facilitar a visualização dos parâmetros utilizados na análise.
+
+### 4.8.3 Cálculo da Energia Disponível e da Energia Útil
+
+A função `validar_parametros()` é responsável pela realização dos cálculos energéticos.
+
+```python
+def validar_parametros(dados):
+
+    capacidade_total = dados["capacidade_total"]
+    carga_atual = dados["carga_atual"]
+    consumo = dados["consumo"]
+    perdas_percentual = dados["perdas_energeticas"]
+
+    energia_disponivel = capacidade_total * (carga_atual / 100)
+
+    perdas = energia_disponivel * (perdas_percentual / 100)
+
+    energia_util = energia_disponivel - perdas
+
+    autonomia = energia_util / consumo
+
+    autonomia_minutos = autonomia * 60
+
+    return {
+        "energia_disponivel": round(energia_disponivel, 2),
+        "perdas": round(perdas, 2),
+        "energia_util": round(energia_util, 2),
+        "autonomia": round(autonomia, 2),
+        "autonomia_minutos": round(autonomia_minutos, 2)
+    }
+```
+
+Primeiramente, o programa calcula a energia disponível a partir da capacidade total e do percentual de carga:
+
+```text
+Energia disponível = Capacidade total × (Carga atual / 100)
+```
+
+Em seguida, são calculadas as perdas energéticas:
+
+```text
+Perdas = Energia disponível × (Perdas / 100)
+```
+
+A energia útil é obtida pela diferença entre a energia disponível e as perdas:
+
+```text
+Energia útil = Energia disponível − Perdas
+```
+
+Por fim, o programa determina a autonomia estimada dividindo a energia útil pela potência média de consumo:
+
+```text
+Autonomia = Energia útil / Consumo
+```
+
+Como a energia está representada em kWh e o consumo em kW, o resultado da divisão é obtido em horas. Esse valor também é convertido para minutos para facilitar sua interpretação.
+
+### 4.8.4 Apresentação da Análise Energética
+
+Após a realização dos cálculos, a função `imprimir_analise()` apresenta os resultados no terminal.
+
+```python
+def imprimir_analise(analise):
+
+    print("==================================================")
+    print("3. ANÁLISE ENERGÉTICA")
+    print("==================================================")
+
+    print(f"Energia disponível:    {analise['energia_disponivel']} kWh")
+    print(f"Perdas energéticas:    {analise['perdas']} kWh")
+    print(f"Energia útil:           {analise['energia_util']} kWh")
+    print(f"Autonomia estimada:     {analise['autonomia']} h")
+    print(f"Autonomia estimada:     {analise['autonomia_minutos']} min")
+```
+
+Dessa forma, o operador consegue visualizar os principais resultados da análise energética antes da tomada de decisão.
+
+### 4.8.5 Validação da Condição Energética
+
+Para determinar se a nave apresenta condições energéticas adequadas para a operação, foi definido um valor mínimo de autonomia de 2 horas.
+
+```python
+AUTONOMIA_MINIMA = 2.0
+```
+
+A função `gerar_resultado()` compara a autonomia calculada com esse valor mínimo.
+
+```python
+def gerar_resultado(analise):
+
+    autonomia = analise["autonomia"]
+
+    if autonomia >= AUTONOMIA_MINIMA:
+        status = "OK"
+        mensagem = "Condição energética adequada para a operação."
+    else:
+        status = "NOK"
+        mensagem = "Condição energética insuficiente para a operação."
+
+    resultado = {
+        "status": status,
+        "mensagem": mensagem,
+        "autonomia_minima": AUTONOMIA_MINIMA
+    }
+
+    return resultado
+```
+
+A lógica utilizada pode ser representada da seguinte forma:
+
+```text
+Autonomia calculada ≥ 2 horas
+              ↓
+      Condição energética OK
+```
+
+ou:
+
+```text
+Autonomia calculada < 2 horas
+              ↓
+      Condição energética NOK
+```
+
+O resultado `"OK"` indica que a autonomia calculada atende ao requisito mínimo definido para a simulação. Já o resultado `"NOK"` indica que a autonomia calculada está abaixo do requisito estabelecido.
+
+### 4.8.6 Apresentação da Decisão Final
+
+Por fim, a função `imprimir_resultado()` apresenta a decisão final da análise energética.
+
+```python
+def imprimir_resultado(resultado):
+
+    print("==================================================")
+    print("4. DECISÃO FINAL")
+    print("==================================================")
+
+    print(f"Autonomia mínima:      {resultado['autonomia_minima']} h")
+    print(f"Condição energética:   {resultado['status']}")
+    print(f"Status:                 {resultado['mensagem']}")
+```
+
+Essa etapa permite integrar a análise energética ao sistema de validação da pré-decolagem. O resultado obtido poderá posteriormente ser combinado com outros parâmetros de telemetria da Aurora Siger para determinar a condição geral da nave.
+
+### 4.8.7 Fluxo de Funcionamento do Programa
+
+O funcionamento da implementação pode ser resumido no seguinte fluxo:
+
+```text
+Geração dos dados energéticos
+            ↓
+Exibição dos parâmetros
+            ↓
+Cálculo da energia disponível
+            ↓
+Cálculo das perdas
+            ↓
+Cálculo da energia útil
+            ↓
+Cálculo da autonomia
+            ↓
+Comparação com autonomia mínima
+            ↓
+       ┌────┴────┐
+       ↓         ↓
+      OK        NOK
+       ↓         ↓
+Condição      Condição
+adequada    insuficiente
+```
+
+A utilização de funções independentes permite organizar o código de forma modular, facilitando futuras alterações e a integração com dados reais de sensores ou sistemas de telemetria.
+
+É importante destacar que, nesta etapa, os valores energéticos são simulados por meio da biblioteca `random`. Em uma implementação futura da Aurora Siger, esses valores poderão ser substituídos por informações provenientes de sensores, bancos de dados ou sistemas de telemetria.
 
 ---
 
-## 4.9 Conclusão
+## 4.9 Critérios de Validação
 
-A análise energética permitirá determinar a quantidade de energia efetivamente disponível para a Aurora Siger e estimar sua autonomia energética antes do início da operação.
+A validação energética será realizada a partir da comparação entre a autonomia calculada e a autonomia mínima estabelecida para a operação.
 
-O processo considera a capacidade total do sistema de armazenamento, o nível atual de carga, o consumo energético previsto e as perdas associadas ao sistema elétrico.
+Para a implementação apresentada, foi adotada uma autonomia mínima de 2 horas como parâmetro de teste.
 
-A partir desses parâmetros, será possível determinar a energia disponível, aplicar as perdas energéticas, obter a energia útil e, quando aplicável, calcular a autonomia estimada da nave.
+```text
+Autonomia ≥ 2 h
+→ Condição energética: OK
 
-Os resultados serão posteriormente incorporados ao sistema desenvolvido em Python, permitindo utilizar a condição energética como um dos critérios de validação do processo de pré-decolagem.
+Autonomia < 2 h
+→ Condição energética: NOK
+```
 
-Dessa forma, a análise energética complementará os demais parâmetros de telemetria da Aurora Siger, proporcionando uma avaliação estruturada das condições energéticas necessárias para o início da operação.
+Esse valor é utilizado como requisito da simulação e deverá ser substituído pelo valor definido nos requisitos reais da missão.
+
+A validação permite que o resultado da análise energética seja utilizado como uma das condições do sistema de pré-decolagem.
+
+---
+
+## 4.10 Conclusão
+
+A implementação em Python permite automatizar a análise energética da Aurora Siger, realizando desde a obtenção dos parâmetros até a determinação da condição energética final.
+
+O programa calcula a energia disponível a partir da capacidade total e do nível de carga, determina as perdas energéticas, obtém a energia útil e calcula a autonomia estimada com base no consumo médio.
+
+Posteriormente, a autonomia calculada é comparada com o requisito mínimo estabelecido, produzindo uma condição `"OK"` ou `"NOK"`.
+
+A estrutura modular utilizada facilita a integração futura com outros componentes do sistema de controle e validação da Aurora Siger. Os dados atualmente utilizados são simulados, mas a mesma estrutura poderá ser adaptada para receber informações reais provenientes de sensores e sistemas de telemetria.
+
+Dessa forma, a implementação em Python representa a aplicação prática da análise energética descrita neste trabalho, permitindo transformar os parâmetros energéticos em informações objetivas para auxiliar no processo de validação da pré-decolagem.
