@@ -58,7 +58,7 @@ A capacidade total será utilizada como referência para determinar a quantidade
 
 A carga atual representa o percentual de energia armazenada no sistema no momento em que a análise é realizada.
 
-A partir da `capacidade total` e do `percentual de carga`, será possível determinar a quantidade de energia atualmente disponível no sistema.
+A partir da `capacidade_total` e do percentual de carga, será possível determinar a quantidade de energia atualmente disponível no sistema.
 
 O cálculo será realizado por meio da seguinte relação:
 
@@ -80,20 +80,9 @@ Esse valor representa a energia disponível antes da aplicação do fator corres
 
 ### 4.4.3 Consumo Estimado na Decolagem
 
-O `consumo estimado` representa a demanda energética necessária para executar a operação planejada, com especial atenção à etapa de decolagem.
+O `consumo_estimado` representa a demanda energética necessária para executar a operação planejada, com especial atenção à etapa de decolagem.
 
-Esse parâmetro deverá considerar o consumo dos principais sistemas envolvidos na operação da nave, incluindo, quando aplicável:
-
-* sistemas de propulsão;
-* sistemas de controle;
-* computadores de bordo;
-* sensores;
-* sistemas de comunicação;
-* sistemas de navegação;
-* sistemas de gerenciamento de energia;
-* demais equipamentos necessários à operação.
-
-O `consumo estimado` será utilizado para determinar a demanda energética da operação e verificar se a energia útil disponível é suficiente para atendê-la.
+E será utilizado para determinar a demanda energética da operação e verificar se a energia útil disponível é suficiente para atendê-la.
 
 É importante distinguir energia de potência:
 
@@ -108,17 +97,7 @@ Nesse caso, a relação entre energia disponível e potência consumida permitir
 
 ### 4.4.4  Perdas Energéticas
 
-As `perdas energéticas` representam a parcela da energia armazenada que não estará efetivamente disponível para utilização devido às perdas ocorridas durante os processos de armazenamento, conversão, transmissão e distribuição.
-
-Essas perdas podem estar associadas à eficiência de componentes como:
-
-* baterias;
-* conversores;
-* inversores;
-* cabos;
-* sistemas de distribuição;
-* circuitos eletrônicos;
-* demais componentes do sistema elétrico.
+As `perdas_energéticas` representam a parcela da energia armazenada que não estará efetivamente disponível para utilização devido às perdas ocorridas durante os processos de armazenamento, conversão, transmissão e distribuição.
 
 Para fins de cálculo, as perdas poderão ser representadas como um percentual da energia disponível.
 
