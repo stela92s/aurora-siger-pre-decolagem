@@ -14,7 +14,7 @@ Essa análise será utilizada para verificar se a energia armazenada é suficien
 
 ---
 
-## 4.2 Parâmetros
+## 4.2 Parâmetros Considerados
 
 Para a realização dos cálculos, serão considerados quatro parâmetros principais:
 
